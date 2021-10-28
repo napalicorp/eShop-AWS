@@ -1,0 +1,3 @@
+bucket="dev-eshop-tfstate"
+key="state.tfstate"
+region="ap-southeast-2"
