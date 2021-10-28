@@ -1,4 +1,9 @@
-# output "websvr_ip" {
-#   description = "Private IP address of the provisioned web server"
-#   value       = aws_instance.web_server.private_ip
-# }
+output "cluster_arn" {
+  description = "ECS Cluster Arn"
+  value       = aws_ecs_cluster.ecs.arn
+}
+
+output "service_name" {
+  description = "ECS Service name"
+  value       = aws_ecs_service.service.name
+}
