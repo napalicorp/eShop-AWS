@@ -6,8 +6,12 @@ resource "aws_ecs_cluster" "ecs" {
   }
 }
 
-data "aws_ecr_image" "ecrimage" {
-  repository_name = aws_ecr_repository.ecr.name
+data "aws_ecr_repository" "repo" {
+  name = "${var.env_prefix}-eshop-ecr"
+}
+
+data "aws_ecr_image" "image" {
+  repository_name = "${var.env_prefix}-eshop-ecr"
   image_tag = "${var.build_number}"
 }
 
@@ -21,7 +25,7 @@ resource "aws_ecs_task_definition" "task" {
   container_definitions = jsonencode([
     {
       "name" : "eshopweb",
-      "image" : "${aws_ecr_repository.ecr.repository_url}:${var.build_number}@${data.aws_ecr_image.ecrimage.image_digest}",
+      "image" : "${data.aws_ecr_repository.repo.repository_url}:${var.build_number}@${data.aws_ecr_image.image.image_digest}",
       "cpu" : 512,
       "memory" : 2048,
       "essential" : true,
