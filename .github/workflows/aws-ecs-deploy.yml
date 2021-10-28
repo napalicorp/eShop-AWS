@@ -68,10 +68,10 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1.2.1
     - name: Terraform Init
-      run: terraform init -chdir=terraform/eshop-web
+      run: terraform -chdir=terraform/eshop-web init
     - name: Terraform Fmt
-      run: terraform fmt -chdir=terraform/eshop-web
+      run: terraform -chdir=terraform/eshop-web fmt 
     - name: Terraform Validate
-      run: terraform validate -chdir=terraform/eshop-web
+      run: terraform -chdir=terraform/eshop-web validate
     - name: Terraform Apply
-      run: terraform apply -chdir=terraform/eshop-web -var env_prefix=${{env.ENV_PREFIX }} -var build_number=${{ github.sha }} -auto-approve
+      run: terraform -chdir=terraform/eshop-web apply -var env_prefix=${{env.ENV_PREFIX }} -var build_number=${{ github.sha }} -auto-approve
