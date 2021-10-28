@@ -68,7 +68,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1.2.1
     - name: Terraform Init
-      run: terraform -chdir=terraform/eshop-web init
+      run: terraform -chdir=terraform/eshop-web init -backend-config=backend
     - name: Terraform Fmt
       run: terraform -chdir=terraform/eshop-web fmt 
     - name: Terraform Validate
