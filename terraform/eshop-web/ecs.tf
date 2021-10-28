@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "ecs" {
-  name = "eshopecs"
+  name = "${var.env_prefix}-eshop-ecs"
   setting {
     name  = "containerInsights"
     value = "enabled"
@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "task" {
   container_definitions = jsonencode([
     {
       "name" : "eshopweb",
-      "image" : "442623963256.dkr.ecr.ap-southeast-2.amazonaws.com/dev-eshop-ecr:latest",
+      "image" : "${aws_ecr_repository.ecr.repository_url}:${var.build_number}",
       "cpu" : 512,
       "memory" : 2048,
       "essential" : true,
@@ -32,12 +32,12 @@ resource "aws_ecs_task_definition" "task" {
 }
 
 resource "aws_ecs_service" "service" {
-  name             = "service"
+  name             = "${var.env_prefix}-eshop-service"
   cluster          = aws_ecs_cluster.ecs.id
   desired_count    = 1
   launch_type      = "FARGATE"
   platform_version = "LATEST"
-  task_definition = aws_ecs_task_definition.task.arn
+  task_definition  = aws_ecs_task_definition.task.arn
   network_configuration {
     assign_public_ip = true
     security_groups  = [aws_security_group.sg.id]

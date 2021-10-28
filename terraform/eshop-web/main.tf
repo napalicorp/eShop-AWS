@@ -19,14 +19,14 @@ resource "aws_vpc" "vpc" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   tags = {
-    Name = "eshop-ecs-vpc"
+    Name = "${var.env_prefix}-eshop-ecs-vpc"
   }
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "eshop-ecs-igw"
+    Name = "${var.env_prefix}-eshop-ecs-igw"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_subnet" "subnet" {
 }
 
 resource "aws_security_group" "sg" {
-  name   = "ecs"
+  name   = "${var.env_prefix}-eshop-sg"
   vpc_id = aws_vpc.vpc.id
   egress {
     from_port   = 0
