@@ -6,6 +6,11 @@ resource "aws_ecs_cluster" "ecs" {
   }
 }
 
+data "aws_ecr_image" "ecrimage" {
+  repository_name = aws_ecr_repository.ecr.name
+  image_tag = "${var.build_number}"
+}
+
 resource "aws_ecs_task_definition" "task" {
   family                   = "service"
   network_mode             = "awsvpc"
@@ -16,7 +21,7 @@ resource "aws_ecs_task_definition" "task" {
   container_definitions = jsonencode([
     {
       "name" : "eshopweb",
-      "image" : "${aws_ecr_repository.ecr.repository_url}:${var.build_number}",
+      "image" : "${aws_ecr_repository.ecr.repository_url}:${var.build_number}@${data.aws_ecr_image.ecrimage.image_digest}",
       "cpu" : 512,
       "memory" : 2048,
       "essential" : true,
@@ -38,12 +43,10 @@ resource "aws_ecs_service" "service" {
   launch_type      = "FARGATE"
   platform_version = "LATEST"
   task_definition  = aws_ecs_task_definition.task.arn
+  force_new_deployment = true
   network_configuration {
     assign_public_ip = true
     security_groups  = [aws_security_group.sg.id]
     subnets          = [aws_subnet.subnet.id]
-  }
-  lifecycle {
-    ignore_changes = [task_definition]
   }
 }
