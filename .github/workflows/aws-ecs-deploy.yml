@@ -79,7 +79,7 @@ jobs:
       shell: bash
       run: |
         jq --version
-        terraform -chdir=terraform/eshop-web output -json cluster_arn
+        terraform -chdir=terraform/eshop-web output -json cluster_arn | jq -r "."
         cluster_arn=$(terraform -chdir=terraform/eshop-web output -json cluster_arn | jq -r ".")
         service_name=$(terraform -chdir=terraform/eshop-web output -json service_name | jq -r ".")
         task_arn=$(aws ecs list-tasks --cluster $cluster_arn --service-name $service_name | jq -r ".taskArns[0]")
