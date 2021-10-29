@@ -76,4 +76,6 @@ jobs:
     - name: Terraform Apply
       run: terraform -chdir=terraform/eshop-web apply -var env_prefix=${{env.ENV_PREFIX }} -var build_number=${{ github.sha }} -auto-approve
     - name: Show task public ip
-      run: ./terraform/eshop-web/get-task-pubip.sh
+      run: |
+        ls ./terraform/eshop-web/get-task-pubip.sh
+        sh ./terraform/eshop-web/get-task-pubip.sh
