@@ -78,11 +78,10 @@ jobs:
     - name: Output App Url
       shell: bash
       run: |
-        #jq --version
-        #terraform -chdir=terraform/eshop-web output -json cluster_arn | jq -r "."
-        cluster_arn=$(terraform -chdir=terraform/eshop-web output -raw cluster_arn)
-        service_name=$(terraform -chdir=terraform/eshop-web output -raw service_name)
-        echo "Cluster ARN: $cluster_arn , Service Name: $service_name"
+        cluster_arn=`terraform -chdir=terraform/eshop-web output -raw cluster_arn`
+        echo "Cluster ARN: $cluster_arn"
+        service_name=`terraform -chdir=terraform/eshop-web output -raw service_name`
+        echo "Service Name: $service_name"
         task_arn=$(aws ecs list-tasks --cluster $cluster_arn --service-name $service_name | jq -r ".taskArns[0]")
         echo "Task Id: $task_arn"
         task_ni_id=$(aws ecs describe-tasks --cluster $cluster_arn --tasks $task_arn --output json | jq -r '.tasks[0].attachments[0].details[] | select(.name == "networkInterfaceId") | .value')
