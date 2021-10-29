@@ -76,7 +76,6 @@ jobs:
     - name: Terraform Apply
       run: terraform -chdir=terraform/eshop-web apply -var env_prefix=${{env.ENV_PREFIX }} -var build_number=${{ github.sha }} -auto-approve
     - name: Output App Url
-      shell: bash
       run: |
         cluster_arn=`terraform -chdir=terraform/eshop-web output -raw cluster_arn`
         echo "Cluster ARN: $cluster_arn"
